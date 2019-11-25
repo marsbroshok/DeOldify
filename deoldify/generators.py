@@ -84,7 +84,7 @@ def gen_inference_deep(
 ) -> Learner:
     data = get_dummy_databunch()
     learn = gen_learner_deep(
-        data=data, gen_loss=F.l1_loss, arch=arch, nf_factor=nf_factor
+        data=data, gen_loss=F.l1_loss, arch=arch, pretrained=False, nf_factor=nf_factor
     )
     learn.path = root_folder
     learn.load(weights_name)
@@ -93,11 +93,12 @@ def gen_inference_deep(
 
 
 def gen_learner_deep(
-    data: ImageDataBunch, gen_loss, arch=models.resnet34, nf_factor: float = 1.5
+    data: ImageDataBunch, gen_loss, arch=models.resnet34, pretrained: bool = True, nf_factor: float = 1.5
 ) -> Learner:
     return unet_learner_deep(
         data,
         arch,
+        pretrained,
         wd=1e-3,
         blur=True,
         norm_type=NormType.Spectral,
